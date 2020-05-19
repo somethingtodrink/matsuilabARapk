@@ -96,19 +96,27 @@ namespace GoogleARCore.Examples.AugmentedImage
             {
                 AugmentedImageVisualizer visualizer = null;
                 m_Visualizers.TryGetValue(image.DatabaseIndex, out visualizer);
+
+
                 if (image.TrackingState == TrackingState.Tracking && visualizer == null)
                 {
-                    // Create an anchor to ensure that ARCore keeps tracking this augmented image.
-                    Anchor anchor = image.CreateAnchor(image.CenterPose);
-                    visualizer = (AugmentedImageVisualizer)Instantiate(
-                        AugmentedImageVisualizerPrefab, anchor.transform);
-                    visualizer.Image = image;
-                    m_Visualizers.Add(image.DatabaseIndex, visualizer);
+                    if (image.TrackingMethod == AugmentedImageTrackingMethod.FullTracking)
+                    {
+                        Anchor anchor = image.CreateAnchor(image.CenterPose);
+                        visualizer = (AugmentedImageVisualizer)Instantiate(
+                                      AugmentedImageVisualizerPrefab, anchor.transform);
+                        visualizer.Image = image;
+
+                        m_Visualizers.Add(image.DatabaseIndex, visualizer);
+                    }
                 }
-                else if (image.TrackingState == TrackingState.Stopped && visualizer != null)
+                else
                 {
-                    m_Visualizers.Remove(image.DatabaseIndex);
-                    GameObject.Destroy(visualizer.gameObject);
+                    if (image.TrackingMethod == AugmentedImageTrackingMethod.LastKnownPose)
+                    {
+                        m_Visualizers.Remove(image.DatabaseIndex);
+                        GameObject.Destroy(visualizer.gameObject);
+                    }
                 }
             }
 
