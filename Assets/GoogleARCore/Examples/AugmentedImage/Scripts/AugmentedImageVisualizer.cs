@@ -38,24 +38,15 @@ namespace GoogleARCore.Examples.AugmentedImage
         public AugmentedImage Image;
 
         /// <summary>
-        /// A model for the lower left corner of the frame to place when an image is detected.
+        /// çïî¬.
         /// </summary>
-        public GameObject FrameLowerLeft;
+        public GameObject BlackBoard;
 
         /// <summary>
-        /// A model for the lower right corner of the frame to place when an image is detected.
+        /// É`ÉáÅ[ÉN(ï∂éö).
         /// </summary>
-        public GameObject FrameLowerRight;
+        public GameObject Chalk;
 
-        /// <summary>
-        /// A model for the upper left corner of the frame to place when an image is detected.
-        /// </summary>
-        public GameObject FrameUpperLeft;
-
-        /// <summary>
-        /// A model for the upper right corner of the frame to place when an image is detected.
-        /// </summary>
-        public GameObject FrameUpperRight;
 
         /// <summary>
         /// The Unity Update method.
@@ -64,28 +55,20 @@ namespace GoogleARCore.Examples.AugmentedImage
         {
             if (Image == null || Image.TrackingState != TrackingState.Tracking)
             {
-                FrameLowerLeft.SetActive(false);
-                FrameLowerRight.SetActive(false);
-                FrameUpperLeft.SetActive(false);
-                FrameUpperRight.SetActive(false);
+                BlackBoard.SetActive(false);
+                Chalk.SetActive(false);
                 return;
             }
 
             float halfWidth = Image.ExtentX / 2;
             float halfHeight = Image.ExtentZ / 2;
-            FrameLowerLeft.transform.localPosition =
-                (halfWidth * Vector3.left) + (halfHeight * Vector3.back);
-            FrameLowerRight.transform.localPosition =
-                (halfWidth * Vector3.right) + (halfHeight * Vector3.back);
-            FrameUpperLeft.transform.localPosition =
-                (halfWidth * Vector3.left) + (halfHeight * Vector3.forward);
-            FrameUpperRight.transform.localPosition =
-                (halfWidth * Vector3.right) + (halfHeight * Vector3.forward);
+            BlackBoard.transform.localPosition =
+                (halfWidth * Vector3.zero) + (halfHeight * Vector3.zero);
+            Chalk.transform.localPosition =
+                (halfWidth * Vector3.zero) + (halfHeight * Vector3.zero);
 
-            FrameLowerLeft.SetActive(true);
-            FrameLowerRight.SetActive(true);
-            FrameUpperLeft.SetActive(true);
-            FrameUpperRight.SetActive(true);
+            BlackBoard.SetActive(true);
+            Chalk.SetActive(true);
         }
     }
 }
