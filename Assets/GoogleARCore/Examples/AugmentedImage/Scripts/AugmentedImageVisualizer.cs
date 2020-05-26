@@ -48,6 +48,7 @@ namespace GoogleARCore.Examples.AugmentedImage
         public GameObject Chalk;
 
 
+
         /// <summary>
         /// The Unity Update method.
         /// </summary>
