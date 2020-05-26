@@ -47,7 +47,8 @@ namespace GoogleARCore.Examples.AugmentedImage
         /// </summary>
         public GameObject Chalk;
 
-
+        public Vector3 vW = new Vector3(-0.5f, 0.0f, 0.0f);
+        public Vector3 vH = new Vector3(0.0f, 0.0f, 0.5f);
 
         /// <summary>
         /// The Unity Update method.
@@ -66,7 +67,7 @@ namespace GoogleARCore.Examples.AugmentedImage
             BlackBoard.transform.localPosition =
                 (halfWidth * Vector3.zero) + (halfHeight * Vector3.zero);
             Chalk.transform.localPosition =
-                (halfWidth * Vector3.zero) + (halfHeight * Vector3.zero);
+                (halfWidth * vW) + (halfHeight * vH);
 
             BlackBoard.SetActive(true);
             Chalk.SetActive(true);
