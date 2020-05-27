@@ -47,8 +47,8 @@ namespace GoogleARCore.Examples.AugmentedImage
         /// </summary>
         public GameObject Chalk;
 
-        public Vector3 vW = new Vector3(-0.5f, 0.0f, 0.0f);
-        public Vector3 vH = new Vector3(0.0f, 0.0f, 0.5f);
+        public Vector3 vW = new Vector3(-0.24f, 0.0f, 0.0f);
+        public Vector3 vH = new Vector3(0.0f, 0.0f, 0.515f);
 
         /// <summary>
         /// The Unity Update method.
