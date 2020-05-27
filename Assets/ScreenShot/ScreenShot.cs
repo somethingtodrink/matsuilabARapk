@@ -43,6 +43,11 @@ public class ScreenShot : MonoBehaviour
             StartCoroutine(imageShooting(path, _imageTitle));
         }
     }
+    public void takeAshot()
+    {
+        string path = Application.dataPath + _screenShotFolder;
+        StartCoroutine(imageShooting(path, _imageTitle));
+    }
 
     //撮影ボタン設定
     void OnGUI()
