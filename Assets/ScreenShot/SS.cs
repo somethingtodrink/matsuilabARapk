@@ -6,9 +6,17 @@ using UnityEngine;
 public class SS : MonoBehaviour
 {
     private string _fileName = "";
+    private string _fileHeadName = "";
+    public GameObject _subject;
+    
     public void takeAshot()
     {
         StartCoroutine(WriteFileProcess());
+    }
+
+    void Start()
+    {
+        _fileHeadName = _subject.GetComponent<TextMesh>().text;
     }
 
     void Update()
@@ -17,7 +25,7 @@ public class SS : MonoBehaviour
 
     private IEnumerator WriteFileProcess()
     {
-        _fileName = "Screenshot" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png";
+        _fileName = _fileHeadName + "_" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".png";
         yield return CaptureScreenshotProcess();
         yield return MediaDirWriteFileProcess();
     }
