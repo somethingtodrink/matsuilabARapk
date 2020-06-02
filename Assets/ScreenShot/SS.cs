@@ -6,7 +6,8 @@ using UnityEngine;
 public class SS : MonoBehaviour
 {
     private string _fileName = "";
-    private string _fileHeadName = "";
+    private string fileHeadName = "";
+    
     public GameObject _subject;
     
     public void takeAshot()
@@ -16,7 +17,12 @@ public class SS : MonoBehaviour
 
     void Start()
     {
-        _fileHeadName = _subject.GetComponent<TextMesh>().text;
+        fileHeadName = _subject.GetComponent<TextMesh>().text;
+        string[] invalidPathChars = new string[] { "\\", "/", ":", "*", "?", "\"", "<", ">", "|" };
+        foreach (string invalidPathChar in invalidPathChars)
+        {
+            fileHeadName = fileHeadName.Replace(invalidPathChar, String.Empty);
+        }
     }
 
     void Update()
@@ -25,7 +31,7 @@ public class SS : MonoBehaviour
 
     private IEnumerator WriteFileProcess()
     {
-        _fileName = _fileHeadName + "_" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".png";
+        _fileName = fileHeadName + "_" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".png";
         yield return CaptureScreenshotProcess();
         yield return MediaDirWriteFileProcess();
     }
@@ -40,11 +46,12 @@ public class SS : MonoBehaviour
 #elif UNITY_ANDROID
         path = Application.persistentDataPath + "/" + _fileName;
 #endif
-
         Debug.Log("BeginCaptureScreenshot:" + path);
         ScreenCapture.CaptureScreenshot(_fileName);
         Debug.Log("AfterCaptureScreenshot:" + path);
 
+        var mediaActionSound = new AndroidJavaObject("android.media.MediaActionSound");
+        mediaActionSound.Call("play", mediaActionSound.GetStatic<int>("SHUTTER_CLICK"));
         while (File.Exists(path) == false)
         {
             Debug.Log("NoFile:" + path);
