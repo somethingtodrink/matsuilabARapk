@@ -21,7 +21,7 @@ public class SS : MonoBehaviour
         string[] invalidPathChars = new string[] { "\\", "/", ":", "*", "?", "\"", "<", ">", "|" };
         foreach (string invalidPathChar in invalidPathChars)
         {
-            fileHeadName = fileHeadName.Replace(invalidPathChar, String.Empty);
+            fileHeadName = fileHeadName.Replace(invalidPathChar, string.Empty);
         }
     }
 
@@ -52,6 +52,7 @@ public class SS : MonoBehaviour
 
         var mediaActionSound = new AndroidJavaObject("android.media.MediaActionSound");
         mediaActionSound.Call("play", mediaActionSound.GetStatic<int>("SHUTTER_CLICK"));
+
         while (File.Exists(path) == false)
         {
             Debug.Log("NoFile:" + path);

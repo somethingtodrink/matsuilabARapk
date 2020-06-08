@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5223864915502898399}
   - component: {fileID: 14347725603856408}
   - component: {fileID: 7119836109321355419}
+  - component: {fileID: 4717808167156713207}
   m_Layer: 0
   m_Name: Orderer
   m_TagString: Untagged
@@ -80,7 +81,7 @@ TextMesh:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 915775860975681164}
-  m_Text: "\u4E00\u4E8C\u4E09\u56DB\u4E94\u516D\u4E03\u516B\u4E5D\u5341\u4E00\u4E8C\u4E09\u56DB\u4E94\u516D\u4E03\u516B"
+  m_Text: 
   m_OffsetZ: 0
   m_CharacterSize: 0.25
   m_LineSpacing: 1
@@ -94,6 +95,20 @@ TextMesh:
   m_Color:
     serializedVersion: 2
     rgba: 4294967295
+--- !u!114 &4717808167156713207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 915775860975681164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab8d18a454a664c4194e272e77987c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chalk: {fileID: 915775860975681164}
+  text: 
 --- !u!1 &3350391567301843045
 GameObject:
   m_ObjectHideFlags: 0
