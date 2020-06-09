@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4023689659805459011}
   - component: {fileID: 1300825492547939914}
   - component: {fileID: 1591089948136414243}
+  - component: {fileID: 3532844432869819419}
   m_Layer: 0
   m_Name: Contractor
   m_TagString: Untagged
@@ -79,7 +80,7 @@ TextMesh:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8855094675576098584}
-  m_Text: com.matsuilab.AR
+  m_Text: 
   m_OffsetZ: 0
   m_CharacterSize: 0.25
   m_LineSpacing: 1
@@ -93,3 +94,16 @@ TextMesh:
   m_Color:
     serializedVersion: 2
     rgba: 4294967295
+--- !u!114 &3532844432869819419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8855094675576098584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab8d18a454a664c4194e272e77987c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chalk: {fileID: 8855094675576098584}

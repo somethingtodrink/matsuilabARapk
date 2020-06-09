@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 799940071663255511}
   - component: {fileID: 8159468615120631083}
   - component: {fileID: 4138503091798825869}
+  - component: {fileID: 3072690129625868327}
   m_Layer: 0
   m_Name: Point
   m_TagString: Untagged
@@ -79,7 +80,7 @@ TextMesh:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4832444441520613886}
-  m_Text: 1234567890123456789012345678901234
+  m_Text: 
   m_OffsetZ: 0
   m_CharacterSize: 0.25
   m_LineSpacing: 1
@@ -93,3 +94,16 @@ TextMesh:
   m_Color:
     serializedVersion: 2
     rgba: 4294967295
+--- !u!114 &3072690129625868327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4832444441520613886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab8d18a454a664c4194e272e77987c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chalk: {fileID: 4832444441520613886}

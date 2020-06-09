@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3372175723927396854}
   - component: {fileID: 6873834995028770672}
   - component: {fileID: 2441332041225951535}
+  - component: {fileID: 5971686949721567564}
   m_Layer: 0
   m_Name: Description
   m_TagString: Untagged
@@ -79,7 +80,7 @@ TextMesh:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8586913783571060217}
-  m_Text: "19\n\xD7\n5\n=\n95"
+  m_Text: 
   m_OffsetZ: 0
   m_CharacterSize: 0.25
   m_LineSpacing: 1
@@ -93,3 +94,16 @@ TextMesh:
   m_Color:
     serializedVersion: 2
     rgba: 4294967295
+--- !u!114 &5971686949721567564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8586913783571060217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab8d18a454a664c4194e272e77987c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chalk: {fileID: 8586913783571060217}
