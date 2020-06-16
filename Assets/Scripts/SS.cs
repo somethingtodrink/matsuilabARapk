@@ -5,10 +5,9 @@ using UnityEngine;
 
 public class SS : MonoBehaviour
 {
-    private string _fileName = "";
-    private string fileHeadName = "";
-    
-    public GameObject _subject;
+    string fileName = "";
+    string fileHeadName = "";
+    string key = "";
     
     public void takeAshot()
     {
@@ -17,7 +16,8 @@ public class SS : MonoBehaviour
 
     void Start()
     {
-        fileHeadName = _subject.GetComponent<TextMesh>().text;
+        key = "Subject" + "_InputField";
+        fileHeadName = PlayerPrefs.GetString(key, "");
         string[] invalidPathChars = new string[] { "\\", "/", ":", "*", "?", "\"", "<", ">", "|" };
         foreach (string invalidPathChar in invalidPathChars)
         {
@@ -31,7 +31,7 @@ public class SS : MonoBehaviour
 
     private IEnumerator WriteFileProcess()
     {
-        _fileName = fileHeadName + "_" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".png";
+        fileName = fileHeadName + "_" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".png";
         yield return CaptureScreenshotProcess();
         yield return MediaDirWriteFileProcess();
     }
@@ -42,12 +42,12 @@ public class SS : MonoBehaviour
         yield return new WaitForEndOfFrame();
         string path = null;
 #if UNITY_EDITOR
-        path = _fileName;
+        path = fileName;
 #elif UNITY_ANDROID
-        path = Application.persistentDataPath + "/" + _fileName;
+        path = Application.persistentDataPath + "/" + fileName;
 #endif
         Debug.Log("BeginCaptureScreenshot:" + path);
-        ScreenCapture.CaptureScreenshot(_fileName);
+        ScreenCapture.CaptureScreenshot(fileName);
         Debug.Log("AfterCaptureScreenshot:" + path);
 
         var mediaActionSound = new AndroidJavaObject("android.media.MediaActionSound");
@@ -69,7 +69,7 @@ public class SS : MonoBehaviour
         if (Application.platform != RuntimePlatform.Android)
             yield return null;
 #if UNITY_ANDROID
-        var path = Application.persistentDataPath + "/" + _fileName;
+        var path = Application.persistentDataPath + "/" + fileName;
         while ( File.Exists( path ) == false )
         {
             Debug.Log( "NoFile:" + path );
@@ -81,8 +81,8 @@ public class SS : MonoBehaviour
         {
             var outputPath = joPublicDir.Call<string>( "toString" );
             Debug.Log( "MediaDir:" + outputPath );
-//              outputPath += "/100ANDRO/" + _fileName;
-            outputPath += "/Screenshots/" + _fileName;
+//              outputPath += "/100ANDRO/" + fileName;
+            outputPath += "/Screenshots/" + fileName;
             var pngBytes = File.ReadAllBytes( path );
             File.WriteAllBytes( outputPath, pngBytes );
             yield return new WaitForEndOfFrame();
