@@ -44,8 +44,11 @@ namespace GoogleARCore.Examples.AugmentedImage
         /// <summary>
         /// A prefab for visualizing an AugmentedImage.
         /// </summary>
-        public AugmentedImageVisualizer AugmentedImageVisualizerPrefab;
-
+        //public AugmentedImageVisualizer AugmentedImageVisualizerPrefab;
+        public GameObject AIVPrefab;
+        GameObject prfb;
+        
+        /*
         /// <summary>
         /// The overlay containing the fit to scan user guide.
         /// </summary>
@@ -55,6 +58,7 @@ namespace GoogleARCore.Examples.AugmentedImage
             = new Dictionary<int, AugmentedImageVisualizer>();
 
         private List<AugmentedImage> m_TempAugmentedImages = new List<AugmentedImage>();
+        */
 
         /// <summary>
         /// The Unity Awake() method.
@@ -63,12 +67,20 @@ namespace GoogleARCore.Examples.AugmentedImage
         {
             // Enable ARCore to target 60fps camera capture frame rate on supported devices.
             // Note, Application.targetFrameRate is ignored when QualitySettings.vSyncCount != 0.
-            Application.targetFrameRate = 60;
+            Application.targetFrameRate = 30;
         }
+
+        public void Start()
+        {
+            prfb = (GameObject)Instantiate(AIVPrefab);
+            //prfb.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, 0);
+        }
+           
 
         /// <summary>
         /// The Unity Update method.
         /// </summary>
+        
         public void Update()
         {
             // Exit the app when the 'back' button is pressed.
@@ -77,7 +89,13 @@ namespace GoogleARCore.Examples.AugmentedImage
                 SceneManager.LoadScene("Menu_Scene");
                 //Application.Quit();
             }
+            //prfb.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, 0);
+            Screen.sleepTimeout = SleepTimeout.SystemSetting;
+            
+            //FitToScanOverlay.SetActive(false);
 
+            /*
+             *
             // Only allow the screen to sleep when not tracking.
             if (Session.Status != SessionStatus.Tracking)
             {
@@ -133,6 +151,8 @@ namespace GoogleARCore.Examples.AugmentedImage
             }
 
             FitToScanOverlay.SetActive(true);
+            * 
+            */
         }
     }
 }
