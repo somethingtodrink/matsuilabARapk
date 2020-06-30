@@ -5,19 +5,20 @@ using UnityEngine.UI;
 
 public class SaveInputfield : MonoBehaviour
 {
-    #pragma warning disable 649
-    [SerializeField] GameObject inFi;
-    #pragma warning restore 649
+    int indx;
+    string key;
 
     void Start()
     {
-        inFi.GetComponent<InputField>().text = PlayerPrefs.GetString(inFi.name, "");
+        indx = this.name.IndexOf("_");
+        key = this.name.Substring(0, indx);
+        this.GetComponent<InputField>().text = PlayerPrefs.GetString(key);
     }
 
-    public void SaveInfi()
+    void Update()
     {
-        PlayerPrefs.SetString(inFi.name, inFi.GetComponent<InputField>().text);
-        inFi.GetComponent<InputField>().text = PlayerPrefs.GetString(inFi.name, "");
+        PlayerPrefs.SetString(key, this.GetComponent<InputField>().text);
         PlayerPrefs.Save();
+        this.GetComponent<InputField>().text = PlayerPrefs.GetString(key, "");
     }
 }

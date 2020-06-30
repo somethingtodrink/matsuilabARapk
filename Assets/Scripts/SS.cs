@@ -16,7 +16,7 @@ public class SS : MonoBehaviour
 
     void Start()
     {
-        key = "Subject" + "_InputField";
+        key = "Subject";
         fileHeadName = PlayerPrefs.GetString(key, "");
         string[] invalidPathChars = new string[] { "\\", "/", ":", "*", "?", "\"", "<", ">", "|" };
         foreach (string invalidPathChar in invalidPathChars)

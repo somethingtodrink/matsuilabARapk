@@ -130,9 +130,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 302833716}
-  - component: {fileID: 302833717}
+  - component: {fileID: 302833718}
   m_Layer: 0
-  m_Name: Controller
+  m_Name: SceneChanger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -152,7 +152,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &302833717
+--- !u!114 &302833718
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -161,7 +161,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 302833715}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 087d5eb83b151084eaa0e63fb96b4d2d, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b12d5352520b3147811d1c7e09b0474, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1004054857
@@ -398,7 +398,6 @@ GameObject:
   - component: {fileID: 1770829603}
   - component: {fileID: 1770829602}
   - component: {fileID: 1770829601}
-  - component: {fileID: 1770829604}
   m_Layer: 5
   m_Name: Botton_AR
   m_TagString: Untagged
@@ -469,7 +468,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1770829604}
+      - m_Target: {fileID: 302833718}
         m_MethodName: ChangeToARScene
         m_Mode: 1
         m_Arguments:
@@ -517,18 +516,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1770829599}
   m_CullTransparentMesh: 0
---- !u!114 &1770829604
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1770829599}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73b7ac8807d953c4e8226493c23328aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1782306883
 GameObject:
   m_ObjectHideFlags: 0
@@ -816,7 +803,6 @@ GameObject:
   - component: {fileID: 2113748218}
   - component: {fileID: 2113748217}
   - component: {fileID: 2113748216}
-  - component: {fileID: 2113748219}
   m_Layer: 5
   m_Name: Button_Input
   m_TagString: Untagged
@@ -887,7 +873,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2113748219}
+      - m_Target: {fileID: 302833718}
         m_MethodName: ChangeToInputScene
         m_Mode: 1
         m_Arguments:
@@ -935,15 +921,3 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2113748214}
   m_CullTransparentMesh: 0
---- !u!114 &2113748219
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2113748214}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73b7ac8807d953c4e8226493c23328aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

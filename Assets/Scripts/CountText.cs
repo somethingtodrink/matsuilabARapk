@@ -5,26 +5,23 @@ using UnityEngine.UI;
 
 public class CountText : MonoBehaviour
 {
-    #pragma warning disable 649
-    [SerializeField] GameObject inFi;
-    [SerializeField] Text count;
-    #pragma warning restore 649
-    int n = 0;
+    InputField inFi;
+    Text txt;
+    int len = 0;
+
     // Start is called before the first frame update
     void Start()
     {
-        n = inFi.GetComponent<InputField>().text.Length;
-        count.GetComponent<Text>().text = n.ToString() + "字";
+        inFi = this.GetComponentInParent<InputField>();
+        txt = this.GetComponent<Text>();
+        len = inFi.text.Length;
+        txt.text = len.ToString() + "字";
     }
 
     // Update is called once per frame
     void Update()
     {
-        
-    }
-    public void ChangeCount()
-    {
-        n = inFi.GetComponent<InputField>().text.Length;
-        count.GetComponent<Text>().text = n.ToString() + "字";
+        len = inFi.text.Length;
+        txt.text = len.ToString() + "字";
     }
 }
