@@ -26,12 +26,12 @@ public class DragAndDrop : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        // ドラッグ前の位置に戻す
         transform.position = eventData.position;
     }
-
+    
     public void OnDrop(PointerEventData eventData)
     {
+        /*
         var raycastResults = new List<RaycastResult>();
         EventSystem.current.RaycastAll(eventData, raycastResults);
 
@@ -44,5 +44,7 @@ public class DragAndDrop : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
                 this.enabled = false;
             }
         }
+         */
     }
+    
 }

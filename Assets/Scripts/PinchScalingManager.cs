@@ -13,7 +13,6 @@ public class PinchScalingManager : MonoBehaviour
     //コンテンツのRectTransformの参照
     private RectTransform contentRect;
 
-    [SerializeField]
     private float scale;    //現在の拡大率
 
     [System.Serializable]
@@ -37,13 +36,15 @@ public class PinchScalingManager : MonoBehaviour
 
     private float max_distance = 0;         //ピンチ開始時の指間の距離
 
+    private string key = "Scale";
+
 #pragma warning restore 649
 
 
 
     void Start()
     {
-
+        scale = PlayerPrefs.GetFloat(key, 1.0F);
         contentRect = content.GetComponent<RectTransform>();   //参照を設定
 
         defauldCellSize = content.cellSize;
@@ -179,6 +180,8 @@ public class PinchScalingManager : MonoBehaviour
         content.cellSize = defauldCellSize * scale;                     //想定するコンテンツの大きさを更新する
         contentRect.localPosition = center * scale;                     //拡大率が変わった時に中心座標がずれないように再設定する
         wrapper.localScale = new Vector3(scale, scale, 1);        //全体を拡大縮小する
+        PlayerPrefs.SetFloat(key, scale);
+        PlayerPrefs.Save();
     }
 
 }
