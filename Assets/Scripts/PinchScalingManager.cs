@@ -48,7 +48,10 @@ public class PinchScalingManager : MonoBehaviour
         contentRect = content.GetComponent<RectTransform>();   //参照を設定
 
         defauldCellSize = content.cellSize;
+        content.cellSize = defauldCellSize * scale;
         center = contentRect.localPosition / scale;
+        contentRect.localPosition = center * scale;
+        wrapper.localScale = new Vector3(scale, scale, 1);
 
         //状態の初期化
         UpdateScaling();

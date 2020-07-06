@@ -3,8 +3,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-// Imageコンポーネントを必要とする
-[RequireComponent(typeof(Image))]
 
 // ドラッグとドロップに関するインターフェースを実装する
 public class DragAndDrop : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IDropHandler
