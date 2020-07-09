@@ -2,6 +2,7 @@
 using System.Collections;
 using System.IO;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SS : MonoBehaviour
 {
@@ -27,6 +28,7 @@ public class SS : MonoBehaviour
 
     void Update()
     {
+        
     }
 
     private IEnumerator WriteFileProcess()

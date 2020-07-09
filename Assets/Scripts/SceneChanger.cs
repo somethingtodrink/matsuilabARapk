@@ -9,6 +9,19 @@ public class SceneChanger : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (SceneManager.GetActiveScene().name == "AR_Scene")
+        {
+            Screen.autorotateToPortrait = true;
+            Screen.autorotateToLandscapeLeft = true;
+            Screen.autorotateToLandscapeRight = true;
+            Screen.autorotateToPortraitUpsideDown = false;
+            
+            Screen.orientation = ScreenOrientation.AutoRotation;
+        }
+        else
+        {
+            Screen.orientation = ScreenOrientation.Portrait;
+        }
 
     }
 

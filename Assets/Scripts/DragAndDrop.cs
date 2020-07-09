@@ -8,7 +8,13 @@ using UnityEngine.UI;
 public class DragAndDrop : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IDropHandler
 {
     // ドラッグ前の位置
-    private Vector2 prevPos;
+    //private Vector2 prevPos;
+    //RectTransform rect;
+    private void Awake()
+    {
+        //rect = this.GetComponent<RectTransform>();
+        //rect.localPosition = new Vector3(PlayerPrefs.GetFloat("X", 0.0f), PlayerPrefs.GetFloat("Y", 0.0f), 0);
+    }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -25,6 +31,11 @@ public class DragAndDrop : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
     public void OnEndDrag(PointerEventData eventData)
     {
         transform.position = eventData.position;
+        //Vector3 savePos = transform.position;
+        //savePos = transform.InverseTransformPoint(savePos);
+        //PlayerPrefs.SetFloat("X", savePos.x);
+        //PlayerPrefs.SetFloat("Y", savePos.y);
+        //PlayerPrefs.Save();
     }
     
     public void OnDrop(PointerEventData eventData)
