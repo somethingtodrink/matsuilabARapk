@@ -20,6 +20,7 @@
 
 #if UNITY_2020_1_OR_NEWER
 using System;
+using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
 using UnityEditor.PackageManager.Requests;
@@ -30,11 +31,11 @@ namespace GoogleARCoreInternal
 {
     internal class ARCoreUnitySDKPreprocessBuild : IPreprocessBuildWithReport
     {
-        private static int k_MinSdkVersion = 14;
+        private static int _minSdkVersion = 14;
 
         public int callbackOrder { get { return 0; } }
 
-        private ListRequest m_Request;
+        private ListRequest _request;
 
         public void OnPreprocessBuild(BuildReport report)
         {
@@ -50,27 +51,27 @@ namespace GoogleARCoreInternal
 
         private void _EnsureMinSdkVersion()
         {
-            if ((int)PlayerSettings.Android.minSdkVersion < k_MinSdkVersion)
+            if ((int)PlayerSettings.Android.minSdkVersion < _minSdkVersion)
             {
                 throw new BuildFailedException(string.Format("ARCore apps require a minimum " +
                     "SDK version of {0}. Currently set to {1}",
-                    k_MinSdkVersion, PlayerSettings.Android.minSdkVersion));
+                    _minSdkVersion, PlayerSettings.Android.minSdkVersion));
             }
         }
 
         private void _EnsureUnityARCoreIsNotPresent()
         {
-            m_Request = Client.List();    // List packages installed for the Project
+            _request = Client.List();    // List packages installed for the Project
             EditorApplication.update += _PackageListProgress;
         }
 
         private void _PackageListProgress()
         {
-            if (m_Request.IsCompleted)
+            if (_request.IsCompleted)
             {
-                if (m_Request.Status == StatusCode.Success)
+                if (_request.Status == StatusCode.Success)
                 {
-                    foreach (var package in m_Request.Result)
+                    foreach (var package in _request.Result)
                     {
                         if (package.name == "com.unity.xr.arcore")
                         {
@@ -80,7 +81,7 @@ namespace GoogleARCoreInternal
                         }
                     }
                 }
-                else if (m_Request.Status >= StatusCode.Failure)
+                else if (_request.Status >= StatusCode.Failure)
                 {
                     throw new BuildFailedException("Failure iterating packages when checking for" +
                     " ARCore XR Plugin.");
@@ -95,12 +96,17 @@ namespace GoogleARCoreInternal
             var graphicsApis = PlayerSettings.GetGraphicsAPIs(BuildTarget.Android);
             foreach (var graphicsApi in graphicsApis)
             {
-                if (graphicsApi != GraphicsDeviceType.OpenGLES2 &&
-                    graphicsApi != GraphicsDeviceType.OpenGLES3)
+                // GLES3 is always supported.
+                if (graphicsApi != GraphicsDeviceType.OpenGLES3)
                 {
-                    throw new BuildFailedException(
-                        string.Format("You have enabled the {0} graphics API, which is not " +
-                        "supported by ARCore.", graphicsApi));
+                    // GLES2 is only supported when ARCore is not required.
+                    if (ARCoreProjectSettings.Instance.IsARCoreRequired ||
+                        graphicsApi != GraphicsDeviceType.OpenGLES2)
+                    {
+                        throw new BuildFailedException(
+                            string.Format("You have enabled the {0} graphics API, which is not " +
+                            "supported by ARCore.", graphicsApi));
+                    }
                 }
             }
         }

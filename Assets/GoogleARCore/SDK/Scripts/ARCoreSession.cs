@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------
-// <copyright file="ARCoreSession.cs" company="Google">
+// <copyright file="ARCoreSession.cs" company="Google LLC">
 //
-// Copyright 2017 Google LLC. All Rights Reserved.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -53,7 +53,7 @@ namespace GoogleARCore
         [Tooltip("Configuration options to select the camera mode and features.")]
         public ARCoreCameraConfigFilter CameraConfigFilter;
 
-        private OnChooseCameraConfigurationDelegate m_OnChooseCameraConfiguration;
+        private OnChooseCameraConfigurationDelegate _onChooseCameraConfiguration;
 
         /// <summary>
         /// Selects a camera configuration for the ARCore session being resumed.
@@ -192,12 +192,12 @@ namespace GoogleARCore
         public void RegisterChooseCameraConfigurationCallback(
             OnChooseCameraConfigurationDelegate onChooseCameraConfiguration)
         {
-            m_OnChooseCameraConfiguration = onChooseCameraConfiguration;
+            _onChooseCameraConfiguration = onChooseCameraConfiguration;
         }
 
         internal OnChooseCameraConfigurationDelegate GetChooseCameraConfigurationCallback()
         {
-            return m_OnChooseCameraConfiguration;
+            return _onChooseCameraConfiguration;
         }
     }
 }

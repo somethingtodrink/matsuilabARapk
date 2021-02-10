@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------
-// <copyright file="AugmentedImageVisualizer.cs" company="Google">
+// <copyright file="AugmentedImageVisualizer.cs" company="Google LLC">
 //
-// Copyright 2018 Google LLC. All Rights Reserved.
+// Copyright 2018 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -38,17 +38,24 @@ namespace GoogleARCore.Examples.AugmentedImage
         public AugmentedImage Image;
 
         /// <summary>
-        /// çïî¬.
+        /// A model for the lower left corner of the frame to place when an image is detected.
         /// </summary>
-        public GameObject BlackBoard;
+        public GameObject FrameLowerLeft;
 
         /// <summary>
-        /// É`ÉáÅ[ÉN(ï∂éö).
+        /// A model for the lower right corner of the frame to place when an image is detected.
         /// </summary>
-        public GameObject Chalk;
+        public GameObject FrameLowerRight;
 
-        public Vector3 vW = new Vector3(-0.24f, 0.0f, 0.0f);
-        public Vector3 vH = new Vector3(0.0f, 0.0f, 0.515f);
+        /// <summary>
+        /// A model for the upper left corner of the frame to place when an image is detected.
+        /// </summary>
+        public GameObject FrameUpperLeft;
+
+        /// <summary>
+        /// A model for the upper right corner of the frame to place when an image is detected.
+        /// </summary>
+        public GameObject FrameUpperRight;
 
         /// <summary>
         /// The Unity Update method.
@@ -57,20 +64,28 @@ namespace GoogleARCore.Examples.AugmentedImage
         {
             if (Image == null || Image.TrackingState != TrackingState.Tracking)
             {
-                BlackBoard.SetActive(false);
-                Chalk.SetActive(false);
+                FrameLowerLeft.SetActive(false);
+                FrameLowerRight.SetActive(false);
+                FrameUpperLeft.SetActive(false);
+                FrameUpperRight.SetActive(false);
                 return;
             }
 
             float halfWidth = Image.ExtentX / 2;
             float halfHeight = Image.ExtentZ / 2;
-            BlackBoard.transform.localPosition =
-                (halfWidth * Vector3.zero) + (halfHeight * Vector3.zero);
-            Chalk.transform.localPosition =
-                (halfWidth * vW) + (halfHeight * vH);
+            FrameLowerLeft.transform.localPosition =
+                (halfWidth * Vector3.left) + (halfHeight * Vector3.back);
+            FrameLowerRight.transform.localPosition =
+                (halfWidth * Vector3.right) + (halfHeight * Vector3.back);
+            FrameUpperLeft.transform.localPosition =
+                (halfWidth * Vector3.left) + (halfHeight * Vector3.forward);
+            FrameUpperRight.transform.localPosition =
+                (halfWidth * Vector3.right) + (halfHeight * Vector3.forward);
 
-            BlackBoard.SetActive(true);
-            Chalk.SetActive(true);
+            FrameLowerLeft.SetActive(true);
+            FrameLowerRight.SetActive(true);
+            FrameUpperLeft.SetActive(true);
+            FrameUpperRight.SetActive(true);
         }
     }
 }

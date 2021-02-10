@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------
-// <copyright file="Frame.cs" company="Google">
+// <copyright file="Frame.cs" company="Google LLC">
 //
-// Copyright 2017 Google LLC. All Rights Reserved.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,15 +27,15 @@ namespace GoogleARCore
 
     /// <summary>
     /// Provides a snapshot of the state of ARCore at a specific timestamp associated with the
-    /// current frame.  Frame holds information about ARCore's state including tracking status, the
-    /// pose of the camera relative to the world, estimated lighting parameters, and information on
-    /// updates to objects (like Planes or Point Clouds) that ARCore is tracking.
+    /// current frame.  Frame holds information about ARCore's state including the pose of the
+    /// camera relative to the world, estimated lighting parameters, and information on updates to
+    /// objects (like Planes or Point Clouds) that ARCore is tracking.
     /// </summary>
     public class Frame
     {
         //// @cond EXCLUDE_FROM_DOXYGEN
 
-        private static List<TrackableHit> s_TmpTrackableHitList = new List<TrackableHit>();
+        private static List<TrackableHit> _tmpTrackableHitList = new List<TrackableHit>();
 
         //// @endcond
 
@@ -86,8 +86,8 @@ namespace GoogleARCore
         /// Note that the Unity's screen coordinate (0, 0)
         /// starts from bottom left.
         /// </summary>
-        /// <param name="x">Horizontal touch position in Unity's screen coordiante.</param>
-        /// <param name="y">Vertical touch position in Unity's screen coordiante.</param>
+        /// <param name="x">Horizontal touch position in Unity screen coordinates.</param>
+        /// <param name="y">Vertical touch position in Unity screen coordinates.</param>
         /// <param name="filter">A filter bitmask where each set bit in
         /// <see cref="TrackableHitFlags"/>
         /// represents a category of raycast hits the method call should consider valid.</param>
@@ -107,11 +107,56 @@ namespace GoogleARCore
 
             // Note that the Unity's screen coordinate (0, 0) starts from bottom left.
             bool foundHit = nativeSession.HitTestApi.Raycast(
-                nativeSession.FrameHandle, x, Screen.height - y, filter, s_TmpTrackableHitList);
+                nativeSession.FrameHandle, x, Screen.height - y, filter, _tmpTrackableHitList);
 
-            if (foundHit && s_TmpTrackableHitList.Count != 0)
+            if (foundHit && _tmpTrackableHitList.Count != 0)
             {
-                hitResult = s_TmpTrackableHitList[0];
+                hitResult = _tmpTrackableHitList[0];
+            }
+
+            return foundHit;
+        }
+
+        /// <summary>
+        /// Performs a ray cast that can return a result before ARCore establishes full tracking.
+        ///
+        /// The pose and apparent scale of attached objects depends on the <see
+        /// cref="InstantPlacementPoint"/> tracking method and the provided
+        /// approximateDistanceMeters. A discussion of the different tracking methods and the
+        /// effects of apparent object scale are described in <see cref="InstantPlacementPoint"/>.
+        ///
+        /// This function will succeed only if <see cref="InstantPlacementMode"/> is
+        /// <c>InstantPlacementMode.LocalYUp</c> in the ARCore session configuration, the ARCore
+        /// session status is <see cref="SessionStatus"/>.<c>Tracking</c>, and there are sufficient
+        /// feature points to track the point in screen space.
+        ///
+        /// </summary>
+        /// <param name="x">Horizontal touch position in Unity screen coordinates.</param>
+        /// <param name="y">Vertical touch position in Unity screen coordinates.</param>
+        /// <param name="approximateDistanceMeters">The distance at which to create an <see
+        /// cref="InstantPlacementPoint"/>. This is only used while the tracking method for the
+        /// returned point is
+        /// <c>InstantPlacementPointTrackingMethod.ScreenspaceWithApproximateDistance</c>.</param>
+        /// <param name="hitResult">If successful a <see cref="HitResult"/> with a trackable of type
+        /// <see cref="InstantPlacementPoint"/>.</param>
+        /// <returns><c>true</c> if successful, otherwise <c>false</c>.</returns>
+        [SuppressMemoryAllocationError(IsWarning = true, Reason = "List could be resized")]
+        public static bool RaycastInstantPlacement(float x, float y,
+            float approximateDistanceMeters, out TrackableHit hitResult)
+        {
+            hitResult = new TrackableHit();
+            var nativeSession = LifecycleManager.Instance.NativeSession;
+            if (nativeSession == null)
+            {
+                return false;
+            }
+
+            // Note that the Unity's screen coordinate (0, 0) starts from bottom left.
+            bool foundHit = nativeSession.HitTestApi.Raycast(nativeSession.FrameHandle,
+                x, Screen.height - y, approximateDistanceMeters, _tmpTrackableHitList);
+            if (foundHit && _tmpTrackableHitList.Count != 0)
+            {
+                hitResult = _tmpTrackableHitList[0];
             }
 
             return foundHit;
@@ -146,11 +191,11 @@ namespace GoogleARCore
             bool foundHit =
                 nativeSession.HitTestApi.Raycast(
                     nativeSession.FrameHandle, origin, direction, maxDistance, filter,
-                    s_TmpTrackableHitList);
+                    _tmpTrackableHitList);
 
-            if (foundHit && s_TmpTrackableHitList.Count != 0)
+            if (foundHit && _tmpTrackableHitList.Count != 0)
             {
-                hitResult = s_TmpTrackableHitList[0];
+                hitResult = _tmpTrackableHitList[0];
             }
 
             return foundHit;
@@ -162,8 +207,8 @@ namespace GoogleARCore
         /// Note that the Unity's screen coordinate (0, 0)
         /// starts from bottom left.
         /// </summary>
-        /// <param name="x">Horizontal touch position in Unity's screen coordiante.</param>
-        /// <param name="y">Vertical touch position in Unity's screen coordiante.</param>
+        /// <param name="x">Horizontal touch position in Unity screen coordinates.</param>
+        /// <param name="y">Vertical touch position in Unity screen coordinates.</param>
         /// <param name="filter">A filter bitmask where each set bit in
         /// <see cref="TrackableHitFlags"/>
         /// represents a category of raycast hits the method call should consider valid.</param>
@@ -322,8 +367,8 @@ namespace GoogleARCore
                         return 0;
                     }
 
-                     return nativeSession.PointCloudApi.GetNumberOfPoints(
-                         nativeSession.PointCloudHandle);
+                    return nativeSession.PointCloudApi.GetNumberOfPoints(
+                        nativeSession.PointCloudHandle);
                 }
             }
 
@@ -350,7 +395,7 @@ namespace GoogleARCore
             /// <summary>
             /// Gets a point from the point cloud at the given index.  If the point is inaccessible
             /// due to session state or an out-of-range index a point will be returns with the
-            /// <c>Id</c> field set to <c>PointCloudPoint.k_InvalidPointId</c>.
+            /// <c>Id</c> field set to <c>PointCloudPoint._invalidPointId</c>.
             /// </summary>
             /// <param name="index">The index of the point cloud point to get.</param>
             /// <returns>The point from the point cloud at <c>index</c>.</returns>
@@ -638,6 +683,28 @@ namespace GoogleARCore
                     cameraHandle, nearClipping, farClipping);
                 nativeSession.CameraApi.Release(cameraHandle);
                 return result;
+            }
+
+            /// <summary>
+            /// Updates the input texture with the latest depth data from ARCore.
+            /// If there is no new data, or an error occurs, the contents of the
+            /// texture will remain unchanged. See <see cref="DepthStatus"/> for a
+            /// complete list of reasons.
+            /// </summary>
+            /// <param name="depthTexture">The texture to hold the depth data.</param>
+            /// <returns><see cref="DepthStatus"/>.<c>Success</c> if
+            /// successful.</returns>
+            public static DepthStatus UpdateDepthTexture(ref Texture2D depthTexture)
+            {
+                var nativeSession = LifecycleManager.Instance.NativeSession;
+                var sessionComponent = LifecycleManager.Instance.SessionComponent;
+                if (nativeSession == null || sessionComponent == null ||
+                    sessionComponent.SessionConfig.DepthMode == DepthMode.Disabled)
+                {
+                    return DepthStatus.InternalError;
+                }
+
+                return nativeSession.FrameApi.UpdateDepthTexture(ref depthTexture);
             }
         }
 

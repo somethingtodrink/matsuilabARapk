@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------
-// <copyright file="OpenGL.cs" company="Google">
+// <copyright file="OpenGL.cs" company="Google LLC">
 //
-// Copyright 2019 Google LLC. All Rights Reserved.
+// Copyright 2019 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ namespace GoogleARCoreInternal
     using Import = System.Runtime.InteropServices.DllImportAttribute;
 #else
     using Import = GoogleARCoreInternal.DllImportNoop;
-#endif
+#endif // !UNITY_ANDROID
 
     /// <summary>
     /// Direct interface to the OpenGL ES API.
@@ -40,14 +40,10 @@ namespace GoogleARCoreInternal
     [SuppressMessage("StyleCop.CSharp.DocumentationRules",
                      "SA1602:EnumerationItemsMustBeDocumented",
                      Justification = "OpenGL API")]
+    [SuppressMessage("UnityRules.UnityStyleRules", "US1113:MethodsMustBeUpperCamelCase",
+     Justification = "OpenGL API.")]
     public static class OpenGL
     {
-#if UNITY_ANDROID
-        private const string k_Dll = "GLESv3";
-#else
-        private const string k_Dll = "";
-#endif
-
         public enum Target
         {
             GL_TEXTURE_EXTERNAL_OES = 0x8D65
@@ -70,15 +66,15 @@ namespace GoogleARCoreInternal
         }
 #else
 #pragma warning disable 626
-        [Import(k_Dll)]
+        [Import(ApiConstants.GLESApi)]
         public static extern int glGetError();
 
-        [Import(k_Dll)]
+        [Import(ApiConstants.GLESApi)]
         public static extern void glGenTextures(int n, int[] textures);
 
-        [Import(k_Dll)]
+        [Import(ApiConstants.GLESApi)]
         public static extern void glBindTexture(Target target, int texture);
 #pragma warning restore 626
-#endif
+#endif // !UNITY_EDITOR
     }
 }

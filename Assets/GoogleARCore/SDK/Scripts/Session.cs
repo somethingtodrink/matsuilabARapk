@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------
-// <copyright file="Session.cs" company="Google">
+// <copyright file="Session.cs" company="Google LLC">
 //
-// Copyright 2017 Google LLC. All Rights Reserved.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -57,6 +57,42 @@ namespace GoogleARCore
             get
             {
                 return LifecycleManager.Instance.LostTrackingReason;
+            }
+        }
+
+        /// <summary>
+        /// The current state of the recorder.
+        /// </summary>
+        /// <returns>The current <cref="RecordingStatus"/>.</returns>
+        public static RecordingStatus RecordingStatus
+        {
+            get
+            {
+                var nativeSession = LifecycleManager.Instance.NativeSession;
+                if (nativeSession == null)
+                {
+                    return RecordingStatus.None;
+                }
+
+                return nativeSession.SessionApi.GetRecordingStatus();
+            }
+        }
+
+        /// <summary>
+        /// The current state of playback.
+        /// </summary>
+        /// <returns>The current <cref="PlaybackStatus"/>.</returns>
+        public static PlaybackStatus PlaybackStatus
+        {
+            get
+            {
+                var nativeSession = LifecycleManager.Instance.NativeSession;
+                if (nativeSession == null)
+                {
+                    return PlaybackStatus.None;
+                }
+
+                return nativeSession.SessionApi.GetPlaybackStatus();
             }
         }
 
@@ -141,7 +177,7 @@ namespace GoogleARCore
         /// <summary>
         /// Requests an installation of the ARCore APK on the device.
         /// </summary>
-        /// <param name="userRequested">Whether the installation was requested explicity by a user
+        /// <param name="userRequested">Whether the installation was requested explicitly by a user
         /// action.</param>
         /// <returns>An AsyncTask that completes with an ApkInstallationStatus when the installation
         /// status is resolved.</returns>
@@ -149,6 +185,92 @@ namespace GoogleARCore
         public static AsyncTask<ApkInstallationStatus> RequestApkInstallation(bool userRequested)
         {
             return LifecycleManager.Instance.RequestApkInstallation(userRequested);
+        }
+
+        /// <summary>
+        /// Check whether the depth mode is supported on this device. Not all
+        /// devices support depth, see the
+        /// <a href="https://developers.google.com/ar/discover/supported-devices">
+        /// ARCore supported devices</a> page for details.
+        /// </summary>
+        /// <param name="depthMode">The depth mode.</param>
+        /// <returns>true if the depth mode is supported, false if it is not
+        /// supported or the session has not yet been initialized.</returns>
+        public static bool IsDepthModeSupported(DepthMode depthMode)
+        {
+            var nativeSession = LifecycleManager.Instance.NativeSession;
+            if (nativeSession == null)
+            {
+                return false;
+            }
+
+            bool result = nativeSession.SessionApi.IsDepthModeSupported(
+                depthMode.ToApiDepthMode());
+            return result;
+        }
+
+        /// <summary>
+        /// Starts a new recording, using the provided
+        /// <cref="ARCoreRecordingConfig"/> to define the location to save the
+        /// dataset and other options. If a recording is already in progress this
+        /// call will fail, check the <cref="RecordingStatus"/> before making
+        /// this call. When an ARCore session is paused, recording may continue,
+        /// during this time the camera feed will be recorded as a black screen,
+        /// but sensor data will continue to be captured.
+        /// </summary>
+        /// <param name="config"><cref="ARCoreRecordingConfig"/> containing the
+        /// path to save the dataset along with other recording options.</param>
+        /// <returns><cref="RecordingResult"/>.<c>OK</c> if the recording is
+        /// started (or will start on the next Session resume.) Or a
+        /// <cref="RecordingResult"/> if there was an error.</returns>
+        public static RecordingResult StartRecording(ARCoreRecordingConfig config)
+        {
+            var nativeSession = LifecycleManager.Instance.NativeSession;
+            if (nativeSession == null)
+            {
+                return RecordingResult.ErrorRecordingFailed;
+            }
+
+            return nativeSession.SessionApi.StartRecording(config);
+        }
+
+        /// <summary>
+        /// Stops the current recording. If there is no recording in progress, this
+        /// method will return <cref="RecordingResult".<c>OK</c>.
+        /// </summary>
+        /// <returns><cref="RecordingResult"/>.<c>OK</c> if the recording was
+        /// stopped successfully, or
+        /// <cref="RecordingResult">.<c>ErrorRecordingFailed</c> if there was an
+        /// error.</returns>
+        public static RecordingResult StopRecording()
+        {
+            var nativeSession = LifecycleManager.Instance.NativeSession;
+            if (nativeSession == null)
+            {
+                return RecordingResult.ErrorRecordingFailed;
+            }
+
+            return nativeSession.SessionApi.StopRecording();
+        }
+
+        /// <summary>
+        /// Sets the filepath for a dataset to be played back. The ARCore session
+        /// must be paused when using this method. Resume the session for the
+        /// change to take effect.
+        /// <param name="datasetFilepath"> The filepath of the dataset. Null if
+        /// stopping the playback.</param>
+        /// <returns><cref="PlaybackResult"/>.<c>OK</c> if playback filepath was
+        /// was set without issue. A different <cref="PlaybackResult"/> will be
+        /// returned in the case of an error.</returns>
+        public static PlaybackResult SetPlaybackDataset(string datasetFilepath)
+        {
+            var nativeSession = LifecycleManager.Instance.NativeSession;
+            if (nativeSession == null)
+            {
+                return PlaybackResult.ErrorPlaybackFailed;
+            }
+
+            return nativeSession.SessionApi.SetPlaybackDataset(datasetFilepath);
         }
     }
 }

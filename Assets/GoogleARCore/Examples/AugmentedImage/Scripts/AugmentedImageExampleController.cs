@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------
-// <copyright file="AugmentedImageExampleController.cs" company="Google">
+// <copyright file="AugmentedImageExampleController.cs" company="Google LLC">
 //
-// Copyright 2018 Google LLC. All Rights Reserved.
+// Copyright 2018 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@ namespace GoogleARCore.Examples.AugmentedImage
     using GoogleARCore;
     using UnityEngine;
     using UnityEngine.UI;
-    using UnityEngine.SceneManagement;
 
     /// <summary>
     /// Controller for AugmentedImage example.
@@ -44,21 +43,17 @@ namespace GoogleARCore.Examples.AugmentedImage
         /// <summary>
         /// A prefab for visualizing an AugmentedImage.
         /// </summary>
-        //public AugmentedImageVisualizer AugmentedImageVisualizerPrefab;
-        public GameObject AIVPrefab;
-        GameObject prfb;
-        
-        /*
+        public AugmentedImageVisualizer AugmentedImageVisualizerPrefab;
+
         /// <summary>
         /// The overlay containing the fit to scan user guide.
         /// </summary>
         public GameObject FitToScanOverlay;
 
-        private Dictionary<int, AugmentedImageVisualizer> m_Visualizers
+        private Dictionary<int, AugmentedImageVisualizer> _visualizers
             = new Dictionary<int, AugmentedImageVisualizer>();
 
-        private List<AugmentedImage> m_TempAugmentedImages = new List<AugmentedImage>();
-        */
+        private List<AugmentedImage> _tempAugmentedImages = new List<AugmentedImage>();
 
         /// <summary>
         /// The Unity Awake() method.
@@ -67,35 +62,20 @@ namespace GoogleARCore.Examples.AugmentedImage
         {
             // Enable ARCore to target 60fps camera capture frame rate on supported devices.
             // Note, Application.targetFrameRate is ignored when QualitySettings.vSyncCount != 0.
-            Application.targetFrameRate = 30;
+            Application.targetFrameRate = 60;
         }
-
-        public void Start()
-        {
-            prfb = (GameObject)Instantiate(AIVPrefab);
-            //prfb.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, 0);
-        }
-           
 
         /// <summary>
         /// The Unity Update method.
         /// </summary>
-        
         public void Update()
         {
             // Exit the app when the 'back' button is pressed.
             if (Input.GetKey(KeyCode.Escape))
             {
-                SceneManager.LoadScene("Menu_Scene");
-                //Application.Quit();
+                Application.Quit();
             }
-            //prfb.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, 0);
-            Screen.sleepTimeout = SleepTimeout.SystemSetting;
-            
-            //FitToScanOverlay.SetActive(false);
 
-            /*
-             *
             // Only allow the screen to sleep when not tracking.
             if (Session.Status != SessionStatus.Tracking)
             {
@@ -108,40 +88,32 @@ namespace GoogleARCore.Examples.AugmentedImage
 
             // Get updated augmented images for this frame.
             Session.GetTrackables<AugmentedImage>(
-                m_TempAugmentedImages, TrackableQueryFilter.Updated);
+                _tempAugmentedImages, TrackableQueryFilter.Updated);
 
             // Create visualizers and anchors for updated augmented images that are tracking and do
             // not previously have a visualizer. Remove visualizers for stopped images.
-            foreach (var image in m_TempAugmentedImages)
+            foreach (var image in _tempAugmentedImages)
             {
                 AugmentedImageVisualizer visualizer = null;
-                m_Visualizers.TryGetValue(image.DatabaseIndex, out visualizer);
-
-
+                _visualizers.TryGetValue(image.DatabaseIndex, out visualizer);
                 if (image.TrackingState == TrackingState.Tracking && visualizer == null)
                 {
-                    if (image.TrackingMethod == AugmentedImageTrackingMethod.FullTracking)
-                    {
-                        Anchor anchor = image.CreateAnchor(image.CenterPose);
-                        visualizer = (AugmentedImageVisualizer)Instantiate(
-                                      AugmentedImageVisualizerPrefab, anchor.transform);
-                        visualizer.Image = image;
-
-                        m_Visualizers.Add(image.DatabaseIndex, visualizer);
-                    }
+                    // Create an anchor to ensure that ARCore keeps tracking this augmented image.
+                    Anchor anchor = image.CreateAnchor(image.CenterPose);
+                    visualizer = (AugmentedImageVisualizer)Instantiate(
+                        AugmentedImageVisualizerPrefab, anchor.transform);
+                    visualizer.Image = image;
+                    _visualizers.Add(image.DatabaseIndex, visualizer);
                 }
-                else
+                else if (image.TrackingState == TrackingState.Stopped && visualizer != null)
                 {
-                    if (image.TrackingMethod == AugmentedImageTrackingMethod.LastKnownPose)
-                    {
-                        m_Visualizers.Remove(image.DatabaseIndex);
-                        GameObject.Destroy(visualizer.gameObject);
-                    }
+                    _visualizers.Remove(image.DatabaseIndex);
+                    GameObject.Destroy(visualizer.gameObject);
                 }
             }
 
             // Show the fit-to-scan overlay if there are no images that are Tracking.
-            foreach (var visualizer in m_Visualizers.Values)
+            foreach (var visualizer in _visualizers.Values)
             {
                 if (visualizer.Image.TrackingState == TrackingState.Tracking)
                 {
@@ -151,8 +123,6 @@ namespace GoogleARCore.Examples.AugmentedImage
             }
 
             FitToScanOverlay.SetActive(true);
-            * 
-            */
         }
     }
 }

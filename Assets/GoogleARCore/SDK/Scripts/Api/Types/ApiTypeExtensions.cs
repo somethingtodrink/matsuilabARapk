@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------
-// <copyright file="ApiTypeExtensions.cs" company="Google">
+// <copyright file="ApiTypeExtensions.cs" company="Google LLC">
 //
-// Copyright 2019 Google LLC. All Rights Reserved.
+// Copyright 2019 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -97,6 +97,10 @@ namespace GoogleARCoreInternal
                     return SessionStatus.ErrorPermissionNotGranted;
                 case ApiPrestoStatus.ErrorSessionConfigurationNotSupported:
                     return SessionStatus.ErrorSessionConfigurationNotSupported;
+                case ApiPrestoStatus.ErrorCameraNotAvailable:
+                    return SessionStatus.ErrorCameraNotAvailable;
+                case ApiPrestoStatus.ErrorIllegalState:
+                    return SessionStatus.ErrorIllegalState;
                 default:
                     Debug.LogErrorFormat("Unexpected presto status {0}", prestoStatus);
                     return SessionStatus.FatalError;
@@ -244,6 +248,38 @@ namespace GoogleARCoreInternal
             }
         }
 
+        public static DepthStatus ToDepthStatus(this ApiArStatus apiStatus)
+        {
+            switch (apiStatus)
+            {
+                case ApiArStatus.Success:
+                    return DepthStatus.Success;
+                case ApiArStatus.ErrorNotYetAvailable:
+                    return DepthStatus.NotYetAvailable;
+                case ApiArStatus.ErrorNotTracking:
+                    return DepthStatus.NotTracking;
+                case ApiArStatus.ErrorIllegalState:
+                    return DepthStatus.IllegalState;
+                case ApiArStatus.ErrorInvalidArgument:
+                case ApiArStatus.ErrorResourceExhausted:
+                case ApiArStatus.ErrorDeadlineExceeded:
+                default:
+                    return DepthStatus.InternalError;
+            }
+        }
+
+        public static ApiDepthMode ToApiDepthMode(this DepthMode depthMode)
+        {
+            switch (depthMode)
+            {
+                case DepthMode.Automatic:
+                    return ApiDepthMode.Automatic;
+                case DepthMode.Disabled:
+                default:
+                    return ApiDepthMode.Disabled;
+            }
+        }
+
         public static ApiCloudAnchorMode ToApiCloudAnchorMode(this CloudAnchorMode mode)
         {
             switch (mode)
@@ -306,6 +342,7 @@ namespace GoogleARCoreInternal
                 case ApiArStatus.ErrorSessionPaused:
                     return CloudServiceResponse.ErrorNotTracking;
                 case ApiArStatus.ErrorResourceExhausted:
+                    return CloudServiceResponse.ErrorTooManyCloudAnchors;
                 default:
                     return CloudServiceResponse.ErrorInternal;
             }
@@ -337,6 +374,44 @@ namespace GoogleARCoreInternal
                 case ApiCloudAnchorState.ErrorInternal:
                 default:
                     return CloudServiceResponse.ErrorInternal;
+            }
+        }
+
+        public static RecordingStatus ToRecordingStatus(
+            this ApiRecordingStatus recordingStatus)
+        {
+            switch (recordingStatus)
+            {
+                case ApiRecordingStatus.OK:
+                    return RecordingStatus.OK;
+                case ApiRecordingStatus.IOError:
+                    return RecordingStatus.IOError;
+                case ApiRecordingStatus.None:
+                    return RecordingStatus.None;
+                default:
+                    Debug.LogErrorFormat("Unrecognized ApiRecordingStatus value {0}",
+                        recordingStatus);
+                    return RecordingStatus.None;
+            }
+        }
+
+        public static PlaybackStatus ToPlaybackStatus(
+            this ApiPlaybackStatus playbackStatus)
+        {
+            switch (playbackStatus)
+            {
+                case ApiPlaybackStatus.None:
+                  return PlaybackStatus.None;
+                case ApiPlaybackStatus.OK:
+                    return PlaybackStatus.OK;
+                case ApiPlaybackStatus.IOError:
+                    return PlaybackStatus.IOError;
+                case ApiPlaybackStatus.FinishedSuccess:
+                    return PlaybackStatus.FinishedSuccess;
+                default:
+                    Debug.LogErrorFormat("Unrecognized ApiPlaybackStatus value {0}",
+                        playbackStatus);
+                    return PlaybackStatus.None;
             }
         }
     }
